@@ -1,0 +1,63 @@
+#!/bin/sh
+
+#
+# finds a function name and opens your favorite editor ($EDITOR)
+# right where the function is
+#
+# supported editors are: vi, xemacs, nedit, nc, gvim, vim
+# default editor is vim
+#
+
+FUNCTION=$1
+
+# current options are: vi, nedit, xemacs (vi rules by the way).
+INTERNAL_EDITOR=vim
+
+FUNCTION_FOUND=0
+
+# try to find function in C files
+# note: grep : to skip all empty lines
+# FOUND=`gc -f "^PUBLIC.*[  \*]\<$1\>\|^PRIVATE.*[  \*]\<$1\>\|^static.*[  \*]\<$1\>" | grep :`
+
+# match PUBLIC, PRIVATE, static or a C or C++ function name
+# SEARCH="^PUBLIC.*[  \*]\<$1\>\|^PRIVATE.*[  \*]\<$1\>\|^static.*[  \*]\<$1\>\|^void.*[ :\*]\<$1\>\|^int.*[ :\*]\<$1\>"
+
+# match a line begining with a word (discard those with whitespaces)
+SEARCH="^\w.*\<$1\>"
+
+FOUND=`find -name "*.c" -o -name "*.cc" -o -name "*.cxx" -o -name "*.cpp" -o -name "*.d"| cut -c3- | xargs grep -Hsn "${SEARCH}" | gawk '
+    {
+        split($0, foundstring, ":");
+    }
+    # return only the last occurrence (if a private function has a prototype we return
+    # the actual function, not the prototype)
+    END { printf("%s %s\n", foundstring[1], foundstring[2]) }
+'`
+
+if [ "$FOUND" != " " ]; then
+    SRC=`echo $FOUND | gawk '{print $1}'`
+    LINE=`echo $FOUND | gawk '{print $2}'`
+    FUNCTION_FOUND=1
+fi
+
+# Start editor at function position
+if [ $FUNCTION_FOUND = 0 ]; then
+    echo "Function '$FUNCTION' not found."
+
+    find -name "*.c" -o -name "*.cc" -o -name "*.cxx" -o -name "*.h" -o -name "*.cpp" -o -name "*.d" | cut -c3- | xargs grep -Hsn "$1" | sed -e 's/:/ +/'
+
+else
+
+    echo "Function '$FUNCTION' found in $SRC at line $LINE"
+
+    # add your favorite editor here
+    case $INTERNAL_EDITOR in
+        gvim)       $INTERNAL_EDITOR $SRC +$LINE;;
+        vim)        $INTERNAL_EDITOR $SRC +$LINE;;
+        vi)         $INTERNAL_EDITOR $SRC +$LINE;;
+        nedit)      $INTERNAL_EDITOR -line $LINE $SRC;;
+        nc)         $INTERNAL_EDITOR -line $LINE $SRC;;
+        xemacs)     $INTERNAL_EDITOR +$LINE $SRC;;
+        *)          vi $SRC +$LINE;;
+    esac
+fi

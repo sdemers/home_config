@@ -1,0 +1,32 @@
+#!/bin/sh
+
+TO_FIND=$1
+REPLACE_WITH=$2
+
+if [ $# != 2 ]; then
+
+    echo "Usage: replace <to find> <replace with>"
+    exit
+
+fi
+
+echo "Replacing $TO_FIND with $REPLACE_WITH"
+
+FILES=`find . -follow -name "*.c" -o -name "*.h" -o -name "*.cc" -o -name "*.cxx" -o -name "*.cpp" -o -name "Makefile" -type f 2>/dev/null`
+
+for file in $FILES; do
+
+    grep -q "$TO_FIND" $file
+    GREP_STATUS=$?
+
+    if [ $GREP_STATUS = 0 ]; then
+ 
+        echo "$file replacing '$TO_FIND' with '$REPLACE_WITH'"
+
+        sed -e "1,\$s/$TO_FIND/$REPLACE_WITH/g" $file > $file.replace
+
+        mv -f $file.replace $file
+
+    fi
+
+done

@@ -1,0 +1,120 @@
+#!/bin/bash
+
+exename=`basename $0`
+ignoreFile=${HOME}/.gallignore
+grepOptions=""
+beQuiet=0
+color=1
+printFilenameOnAllLines=0
+reportMatchingFileOnly=0
+
+# parse command line
+# last argument shall be pattern to search for
+for token in $*; do
+
+    case $token in
+        -nc) color=0; shift;;
+        -q) beQuiet=1; shift;;
+        -f) printFilenameOnAllLines=1; shift;;
+        -l) reportMatchingFileOnly=1; color=0; shift;;
+        -[ew]) grepOptions="${grepOptions} -w"; shift;;
+        -*) grepOptions="${grepOptions} ${token}"; shift;;
+        *) regexp=$*;;
+    esac
+done
+
+filemask="*"
+
+case $exename in
+    ga)  filemask='*';;
+    gh)  filemask='\.(h|hpp|hxx)$';;
+    gch) filemask='\.(c|h|hpp|hxx|cxx|cc|cpp)$';;
+    gc)  filemask='\.(c|cxx|cc|cpp)$';;
+    gx)  filemask='\.(c|cxx|cc|cpp)$';;
+    gg)  filemask='\.grammar$';;
+    gp)  filemask='\.py$';;
+esac
+
+if [ ${color} -ne 0 ]; then
+    grepOptions="${grepOptions} --color=yes"
+fi
+
+export beQuiet
+export printFilenameOnAllLines
+export reportMatchingFileOnly
+
+export LC_ALL=C
+
+excludes=""
+if [ -f ${ignoreFile} ]; then
+    for f in $(cat ${ignoreFile} | xargs | sed -e 's/[*]//g' -e 's/[.]/\\./g'); do
+        excludes="${excludes}${f}\\|"
+    done
+
+    excludes="${excludes%\\|}"
+fi
+
+if [ ! -z "${excludes}" ]; then
+    FIND="find -follow -type f 2>/dev/null | grep -v "\'${excludes}\'" | egrep '${filemask}' | sort"
+else
+    FIND="find -follow -type f 2>/dev/null | egrep '${filemask}' | sort"
+fi
+
+eval $FIND | cut -c3- | xargs grep $grepOptions -sn "$regexp" {} \; | gawk '
+
+    BEGIN { currentFile = "" }
+    {
+        # get filename
+        split($0, tok, ":")
+
+        file = tok[1]
+
+        # get line number
+        lno = tok[2]
+
+
+        len = 0
+        for (i in tok)
+        {
+            len++
+        }
+
+        # rebuild line of code out of array
+        line = tok[3]
+        for (i = 4; i <= len; i++)
+        {
+            line = line ":" tok[i]
+        }
+
+        # only print filename once
+        if (ENVIRON["reportMatchingFileOnly"] == "1")
+        {
+            if (currentFile != file)
+            {
+                printf("%s\n", file)
+            }
+        }
+        else if (ENVIRON["printFilenameOnAllLines"] == "1")
+        {
+            printf("%s +%d: %s\n", file, lno, line)
+        }
+        else
+        {
+            if (ENVIRON["beQuiet"] == "0" &&
+                currentFile != file)
+            {
+                printf("\n%s\n=============================================================\n", file);
+            }
+            printf("%5s: %s\n", lno, line)
+        }
+
+        currentFile = file
+    }
+'
+
+if [ ${color} -eq 1 ]; then
+    # reset terminal in case colors are left off
+    tput sgr0
+fi
+
+echo

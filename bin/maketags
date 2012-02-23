@@ -1,0 +1,34 @@
+#!/bin/sh
+
+CTAGSOPTIONS="--append=yes --recurse=yes --fields=+iaS"
+CTAGSOPTIONS="${CTAGSOPTIONS} --extra=+q --c++-kinds=+px"
+
+# make sure that ${LOCALROOT} is set
+if [ -z "${LOCALROOT}" ]; then
+    echo "$0: Error, \${LOCALROOT} is not set."
+    exit
+fi
+
+# Does ${LOCALROOT} exist?
+if [ ! -d ${LOCALROOT} ]; then
+    echo "$0: Error, \${LOCALROOT} doesn't exist."
+    exit
+fi
+
+LOCALTAGS=${LOCALROOT}/tags.localroot
+rm -f ${LOCALTAGS} 2>/dev/null
+
+CTAGS_FILE=${LOCALROOT}/ctags.files
+
+echo "Finding files to include..."
+find ${LOCALROOT} -follow -name "*.c" -o -name "*.cc" -o -name "*.cxx" -o -name "*.cpp" -o -name "*.h" 2>/dev/null | grep -v "LINK" > ${CTAGS_FILE}
+# put everything into double quotes (for filenames with spaces)
+sed -e 's/\(.*\)/"\1"/' ${CTAGS_FILE} > ${CTAGS_FILE}.tmp
+rm ${CTAGS_FILE}.tmp 2>/dev/null
+
+# create tags file for localroot
+echo "Creating tags file for localroot '${LOCALROOT}' in ${LOCALTAGS}."
+echo "ctags ${CTAGSOPTIONS} -o ${LOCALTAGS} -L ${CTAGS_FILE}"
+ctags ${CTAGSOPTIONS} -o ${LOCALTAGS} -L ${CTAGS_FILE} 2>/dev/null
+
+echo "Done."

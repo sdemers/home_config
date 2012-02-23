@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ $# != 1 ]; then
+
+    echo "Usage: d2u <file>"
+    exit;
+
+fi
+
+sed -e 's///g' $1 >$1.tmp
+
+mv $1.tmp $1

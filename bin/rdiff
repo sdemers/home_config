@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if [ -z "${DIFFTOOL}" ]; then
+    DIFFTOOL=tkdiff
+fi
+
+if [ $# != 2 ]; then
+    echo
+    echo "    This script compares two directories recursively with ${DIFFTOOL}."
+    echo
+    echo "    Usage: `basename $0` <dir1> <dir2>"
+    echo
+    exit
+fi
+
+oldDir=`echo $1 | sed -e 's|/*$||g'`
+newDir=`echo $2 | sed -e 's|/*$||g'`
+
+dirs=$(find ${oldDir} -type d -print | sed -e "s|^${oldDir}/||g" | sort)
+
+for d in ${dirs}; do
+
+    if [ -d ${newDir}/${d} ]; then
+        compareDirs.py ${oldDir}/${d} ${newDir}/${d}
+    fi
+done
