@@ -21,7 +21,7 @@ rm -f ${LOCALTAGS} 2>/dev/null
 CTAGS_FILE=${LOCALROOT}/ctags.files
 
 echo "Finding files to include..."
-find ${LOCALROOT} -follow -name "*.c" -o -name "*.cc" -o -name "*.cxx" -o -name "*.cpp" -o -name "*.h" 2>/dev/null | grep -v "LINK" > ${CTAGS_FILE}
+find ${LOCALROOT} -follow -name "*.c" -o -name "*.cc" -o -name "*.cxx" -o -name "*.cpp" -o -name "*.h" -o -name "*.d" 2>/dev/null | grep -v "LINK" > ${CTAGS_FILE}
 # put everything into double quotes (for filenames with spaces)
 sed -e 's/\(.*\)/"\1"/' ${CTAGS_FILE} > ${CTAGS_FILE}.tmp
 rm ${CTAGS_FILE}.tmp 2>/dev/null
