@@ -30,9 +30,8 @@ case $exename in
     gh)  filemask='\.(h|hpp|hxx)$';;
     gch) filemask='\.(c|h|hpp|hxx|cxx|cc|cpp)$';;
     gc)  filemask='\.(c|cxx|cc|cpp)$';;
-    gx)  filemask='\.(c|cxx|cc|cpp)$';;
-    gg)  filemask='\.grammar$';;
-    gp)  filemask='\.py$';;
+    gp)  filemask='\.(py|pyc)$';;
+    gd)  filemask='\.(d|di)$';;
 esac
 
 if [ ${color} -ne 0 ]; then
