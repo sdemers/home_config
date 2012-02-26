@@ -15,6 +15,9 @@ alias which='type -a'
 alias ..='cd ..'
 alias ebash='vi ~/.bashrc; source ~/.bashrc'
 
+# Read custom dircolors
+eval `dircolors $HOME/.dircolors.conf`
+
 ct ()
 {
     if [ "`pwd`" = "${LOCALROOT}" ]; then

@@ -41,6 +41,15 @@ set wildmenu
 " use confirm instead of aborting an action
 set confirm
 
+" When off a buffer is unloaded when it is abandoned
+" Needed for LustyExplorer
+set hidden
+
+" Suppress LustyExplorer error message when commiting in git
+let g:LustyExplorerSuppressRubyWarning = 1
+
+let mapleader = ","
+
 " current directory is always matching the content of the active window
 set autochdir
 
@@ -107,6 +116,7 @@ map <F1> <Nop>
 
 nmap hf o//------------------------------------------------------------------------------<CR>//<ESC>
 nmap hx o//------------------------------------------------------------------------------<CR>/**<CR><CR><CR>*///----------------------------------------------------------------------------<ESC>0kk
+nmap hd o    /**<CR>        <CR>    */<Esc>k0A
 cmap ,cp r ~/src/copyright<CR><ESC>kdd
 
 cab Newclass :r ~/src/newclass
