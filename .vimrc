@@ -179,8 +179,9 @@ nnoremap <C-S-P> :s/\([ ]*\)\([*&]\)/\2\1/<CR>
 
 cmap ,sc s/(\(.\{-}\))\(.*\);/static_cast<\1\>(\2);
 
-map <C-L>  <Esc>:make lib<CR>
-map <S-L>  <Esc>:make<CR>
+nmap <C-L>      <Esc>:make lib<CR>
+nmap <S-L>      <Esc>:make<CR>
+nmap <Leader>mt <Esc>:make test<CR>
 cmap Mt     !maketags
 
 " abbreviations
@@ -190,6 +191,12 @@ abbr obejct object
 abbr fasle  false
 abbr trie   true
 abbr truie  true
+
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
+
+
 
 if has("gui_running")
     colorscheme nuvola
@@ -245,8 +252,8 @@ set path+=./
 "set path+=$BOOST_ROOT/include/
 
 " search word under cursor with Ack
-nnoremap ,w :Ack <C-R><C-W> <CR>
-nnoremap ,a :Ack
+nnoremap <Leader>w :Ack <C-R><C-W> <CR>
+nnoremap <Leader>a :Ack
 
 " show tag list for word under cursor
 nnoremap ,t :ts <C-R><C-W><CR>

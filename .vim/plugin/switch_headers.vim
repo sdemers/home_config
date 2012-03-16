@@ -14,39 +14,45 @@ let loaded_switch_headers = 1
 let cpo_save = $cpo
 set cpo&vim
 
+function! SwitchHelper(ext)
+    let currext = expand("%:e")
+    let tosearch = substitute(expand("%:t"), currext, a:ext, "")
+    try
+        exec "find " . tosearch
+    catch
+        try
+            exec "find ../include/" . tosearch
+        catch
+        try
+            exec "find ../code/" . tosearch
+        catch
+        try
+            exec "find ../src/" . tosearch
+        catch
+        try
+            exec "find ../source/" . tosearch
+        catch
+            return 0
+        endtry
+        endtry
+        endtry
+        endtry
+    endtry
+
+    return 1
+endfun
+
+
 " open header/source in new window
 function! SwitchHeader()
     if &ft == 'c' || &ft == 'cxx' || &ft == 'cc' || &ft == 'cpp'
         if expand('%:e') == 'h' || expand('%:e') == 'hxx'
-            try
-                find %:t:r.c
-            catch
-            endtry
-            try
-                find %:t:r.cxx
-            catch
-            endtry
-            try
-                find %:t:r.cc
-            catch  
-            endtry
-            try
-                find %:t:r.cpp
-            catch  
-            endtry
+            if SwitchHelper("c") || SwitchHelper("cxx") || SwitchHelper("cc") || SwitchHelper("cpp")
+                return
+            endif
         else
-            try
-                find %:t:r.h
-            catch
-            endtry
-            try
-                find %:t:r.hxx
-            catch
-            endtry
-            try
-                find %:t:r.hpp
-            catch
-            endtry
+        if SwitchHelper("h") || SwitchHelper("hpp")
+            return
         endif
     endif
 endfun
