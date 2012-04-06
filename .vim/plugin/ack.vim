@@ -11,7 +11,7 @@ let g:ackprg="ack\\ -H\\ --nocolor\\ --nogroup"
 function! Ack(args)
     let grepprg_bak=&grepprg
     exec "set grepprg=" . g:ackprg
-    execute "silent! grep " . a:args
+    execute "silent! grep! " . a:args
     botright copen
     let &grepprg=grepprg_bak
     exec "redraw!"
@@ -20,7 +20,7 @@ endfunction
 function! AckAdd(args)
     let grepprg_bak=&grepprg
     exec "set grepprg=" . g:ackprg
-    execute "silent! grepadd " . a:args
+    execute "silent! grepadd! " . a:args
     botright copen
     let &grepprg=grepprg_bak
     exec "redraw!"
@@ -29,7 +29,7 @@ endfunction
 function! LAck(args)
     let grepprg_bak=&grepprg
     exec "set grepprg=" . g:ackprg
-    execute "silent! lgrep " . a:args
+    execute "silent! lgrep! " . a:args
     botright lopen
     let &grepprg=grepprg_bak
     exec "redraw!"
@@ -38,7 +38,7 @@ endfunction
 function! LAckAdd(args)
     let grepprg_bak=&grepprg
     exec "set grepprg=" . g:ackprg
-    execute "silent! lgrepadd " . a:args
+    execute "silent! lgrepadd! " . a:args
     botright lopen
     let &grepprg=grepprg_bak
     exec "redraw!"

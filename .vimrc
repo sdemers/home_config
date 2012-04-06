@@ -256,7 +256,7 @@ nnoremap <Leader>w :Ack <C-R><C-W> <CR>
 nnoremap <Leader>a :Ack
 
 " show tag list for word under cursor
-nnoremap ,t :ts <C-R><C-W><CR>
+nnoremap <leader>g :ts <C-R><C-W><CR>
 
 " Source the vimrc file after saving it
 if has("autocmd")
