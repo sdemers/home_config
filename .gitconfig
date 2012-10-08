@@ -1,0 +1,35 @@
+[user]
+    name  = sdemers
+    email = sdemers@gmail.com
+
+[alias]
+    st      = status --untracked-files=no
+    stat    = status
+    taginfo = tag -n10
+    br      = branch
+    brnm    = branch --no-merged
+    brc     = branch --contains
+    brm     = branch --merged
+    co      = checkout
+    ci      = commit -a
+    tkd     = difftool -y --extcmd=tkdiff
+    tkdiff  = difftool -y --extcmd=tkdiff
+    meld    = difftool -y --extcmd=meld
+    spiff   = difftool -y --extcmd=spiff
+    df      = diff --no-ext-diff
+    ls      = ls-files --exclude-per-directory=.gitignore --exclude-from=.git/info/exclude --others --modified --deleted -t
+    gl      = log --graph --abbrev-commit --pretty=oneline --decorate
+
+[core]
+	pager =
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[giggle]
+	main-window-maximized = false
+	main-window-geometry = 1211x900+262+0
+	history-view-vpane-position = 294
+	file-view-vpane-position = 537
+	main-window-view = HistoryView
