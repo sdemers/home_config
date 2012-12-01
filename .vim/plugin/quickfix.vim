@@ -1,3 +1,8 @@
+if exists('loaded_quickfix')
+    finish
+endif
+let loaded_quickfix=1
+
 " toggles the quickfix window.
 command -bang -nargs=? FixQuick call QFixToggle(<bang>0)
 function! QFixToggle(forced)
