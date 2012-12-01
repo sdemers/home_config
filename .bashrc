@@ -15,6 +15,8 @@ alias which='type -a'
 alias ..='cd ..'
 alias ebash='vi ~/.bashrc; source ~/.bashrc'
 
+export FIGNORE=.svn:.o:.hi
+
 # Read custom dircolors
 eval `dircolors $HOME/.dircolors.conf`
 

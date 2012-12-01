@@ -57,7 +57,7 @@ set autochdir
 set swapfile
 set dir=/tmp
 
-set tags=tags,TAGS,$LOCALROOT/tags.localroot,$LOCALROOT/tags.pjroot
+set tags=tags,TAGS,$LOCALROOT/tags
 
 set backup
 set backupdir=/tmp/vim_files/,/tmp
