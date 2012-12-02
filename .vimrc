@@ -265,7 +265,11 @@ endif
 
 if has("autocmd")
     autocmd BufNewFile,BufEnter *.d :set makeprg=redo
+    autocmd BufNewFile,BufEnter *.hs :set makeprg=redo
 endif
 
 " SuperTab scrolls up by default, scroll down instead
 let g:SuperTabDefaultCompletionType = "<C-N>"
+
+" Project plugin window width
+let g:proj_window_width=40
