@@ -20,6 +20,9 @@ export FIGNORE=.svn:.o:.hi
 # Read custom dircolors
 eval `dircolors $HOME/.dircolors.conf`
 
+# autojump
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
+
 ct ()
 {
     if [ "`pwd`" = "${LOCALROOT}" ]; then

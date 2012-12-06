@@ -32,6 +32,7 @@ case $exename in
     gc)  filemask='\.(c|cxx|cc|cpp)$';;
     gp)  filemask='\.(py|pyc)$';;
     gd)  filemask='\.(d|di)$';;
+    ghs) filemask='\.(hs)$';;
 esac
 
 if [ ${color} -ne 0 ]; then
