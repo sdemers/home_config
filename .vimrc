@@ -15,8 +15,6 @@ set shiftwidth=4
 " and I hate that.
 " let b:did_ftplugin = 1
 
-syntax on
-
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
@@ -196,11 +194,13 @@ abbr truie  true
 vnoremap < <gv
 vnoremap > >gv
 
-
-
+syntax enable
+set background=light
 if has("gui_running")
-    colorscheme nuvola
     set guifont=Inconsolata\ 10
+    colorscheme solarized
+else
+    colorscheme nuvola
 endif
 
 if has("cscope") && !exists("isCscopeLoaded")
@@ -268,8 +268,27 @@ if has("autocmd")
     autocmd BufNewFile,BufEnter *.hs :set makeprg=redo
 endif
 
+" Pressing < or > will let you indent/unident selected lines
+vnoremap < <gv
+vnoremap > >gv
+
 " SuperTab scrolls up by default, scroll down instead
 let g:SuperTabDefaultCompletionType = "<C-N>"
 
 " Project plugin window width
 let g:proj_window_width=40
+let g:proj_flags="imstcg"
+
+" eighties
+let g:eighties_enabled = 1
+let g:eighties_minimum_width = 80
+let g:eighties_extra_width = 0 " Increase this if you want some extra room
+let g:eighties_compute = 1 " Disable this if you just want the minimum + extra
+
+" easy-align
+vnoremap <silent> <Enter> :EasyAlign<cr>
+
+" quickly exit visual mode by hitting <space>
+vnoremap <space> <esc>
+
+execute pathogen#infect()

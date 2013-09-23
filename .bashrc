@@ -14,8 +14,10 @@ alias j='jobs -l'
 alias which='type -a'
 alias ..='cd ..'
 alias ebash='vi ~/.bashrc; source ~/.bashrc'
+unalias j
 
 export FIGNORE=.svn:.o:.hi
+export TERM="xterm-256color"
 
 # Read custom dircolors
 eval `dircolors $HOME/.dircolors.conf`
@@ -43,7 +45,11 @@ tt ()
 
 lsp ()
 {
-    ls -l ~/.project.* | grep $*
+    if [ "$*" = "" ]; then
+        ls -l ~/.project.*
+    else
+        ls -l ~/.project.* | grep $*
+    fi
 }
 
 geninclude ()
@@ -82,7 +88,7 @@ c()
 
 vg()
 {
-    files=$(find . -name "*.c" -o -name "*.cpp" -o -name "*.cxx" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" 2>/dev/null)
+    files=$(find . -name "*.c" -o -name "*.cpp" -o -name "*.cxx" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" -o -name "*.d" -o -name "*.hs" 2>/dev/null)
     matches=$(grep -l $1 ${files} | sort)
 
     vi ${matches}
@@ -97,5 +103,19 @@ function vf()
     fi
 }
 
-[ -f ~/.project ] && source ~/.project
+function ad()
+{
+    ack $* -G "\.d$"
+}
 
+function ac()
+{
+    ack $* -G "\.(c|h|cxx|cpp)$"
+}
+
+function pcp()
+{
+    rsync -rvh --progress $*
+}
+
+[ -f ~/.project ] && source ~/.project
