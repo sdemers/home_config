@@ -19,6 +19,7 @@
     df      = diff --no-ext-diff
     ls      = ls-files --exclude-per-directory=.gitignore --exclude-from=.git/info/exclude --others --modified --deleted -t
     gl      = log --graph --abbrev-commit --pretty=oneline --decorate
+    ls-tracked = ls-tree --name-only -r HEAD
 
 [core]
 	pager =
